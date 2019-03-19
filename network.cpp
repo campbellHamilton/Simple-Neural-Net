@@ -79,7 +79,7 @@ Network::Network(std::string name)
 		int pos = line.find(",");
 		std::string sub = line.substr(0, pos);
 		line = line.substr(pos + 1);
-		
+
 		//convert the string to a number
 		settings[counter] = std::stoi(sub);
 		counter++;
@@ -114,13 +114,17 @@ Network::Network(std::string name)
 	hiddenLayerSize = settings[4];
 	for (int k = 0; k < hiddenLayerSize; k++)
 	{
-		std::getline(file, line);
-
 		hiddenLayer.push_back(Layer());
-		Layer * layers = hiddenLayer.data();
-		layers += k;
+	}
+	Layer* layers = hiddenLayer.data();
 
+	int size = settings[3];
+	for (int k = 0; k < hiddenLayerSize; k++)
+	{
+		std::getline(file, line);
 		layers->size = settings[2];
+		
+
 		for (int i = 0; i < layers->size; i++)
 		{
 
@@ -128,20 +132,22 @@ Network::Network(std::string name)
 			std::string sub = line.substr(0, pos);
 			line = line.substr(pos + 1);
 
-			layers->layer.push_back(Perceptron(settings[3]));
+			layers->layer.push_back(Perceptron(size));
 			//set the feature weights
-			double* data = new double[settings[3]];
-			for (int j = 0; j < settings[3]; j++)
+			double* data = new double[size];
+			for (int j = 0; j < size; j++)
 			{
 				int pos2 = sub.find(",");
 				std::string value = sub.substr(0, pos2);
 				sub = sub.substr(pos2 + 1);
 				data[j] = std::stod(value);
 			}
+			size = settings[2];
 			layers->layer[i].SetWeights(data);
 			layers->results.push_back(0.0);
 			delete[] data;
 		}
+		layers++;
 	}
 
 
@@ -240,6 +246,7 @@ void Network::saveToFile(std::string name, bool overwrite)
 			}
 			file << ";";
 		}
+		layers++;
 		file << std::endl;
 	}
 

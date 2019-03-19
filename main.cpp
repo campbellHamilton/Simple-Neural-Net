@@ -314,7 +314,7 @@ int main()
 
 	srand((unsigned int)time(NULL));
 
-	Network network(size, 10, 1);
+	Network network(size, 10, 1, 4);
 
 
 	network.randomizeHiddenWeights(-1.0f, 1.0f);
@@ -403,8 +403,8 @@ int main()
 	std::ofstream ofile2("tester1.txt");
 	std::ofstream ofile3("tester2.txt");
 	network.saveToFile("testing", true);
-	Network loaded("testing.txt");
 
+	Network loaded("testing.txt");
 
 	for (int i = 945; i >= 0; i--)
 	{
@@ -423,7 +423,6 @@ int main()
 		}
 		network.input(data);
 		loaded.input(data);
-
 
 		double result = network.getFinalResult();
 		double result2 = loaded.getFinalResult();
